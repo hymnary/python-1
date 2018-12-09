@@ -1,0 +1,98 @@
+from tkinter import *
+import tkinter.messagebox as kt
+import mysql.connector
+master=Tk()
+lb=Label(master,text="Username").grid(row=0)
+E1=Entry(master,bd=5)
+E1.grid(row=0,column=1)
+
+la=Label(master,text="Password").grid(row=1,column=0)
+E2=Entry(master,bd=5)
+E2.grid(row=1,column=1)
+
+def ok():
+
+    c=mysql.connector.connect(user="root",passwd="",host="localhost",database="mydatabase")
+
+    Username=E1.get()
+    Password=E2.get()
+
+    if Username== "aloo" and Password== "aloo":
+        
+        kt.showinfo("Login info","Welcome")
+        master.destroy()
+        root=Tk()
+        l1=Label(root, text="NAME").grid(row=0)
+        l2=Label(root, text="CLASS").grid(row=1)
+        l3=Label(root, text="AGE").grid(row=2)
+        l4=Label(root, text="SUBJECT_1").grid(row=3)
+        l5=Label(root, text="SUBJECT_2").grid(row=4)
+        
+        NAME=Entry(root)
+        CLASS=Entry(root)
+        AGE=Entry(root)
+        SUBJECT_1=Entry(root)
+        SUBJECT_2=Entry(root)
+
+        NAME.grid(row=0,column=1)
+        CLASS.grid(row=1,column=1)
+        AGE.grid(row=2,column=1)
+        SUBJECT_1.grid(row=3,column=1)
+        SUBJECT_2.grid(row=4,column=1)
+            
+
+        def click():
+            c=mysql.connector.connect(user="root",passwd="",host="localhost",database="mydatabase")
+            cursor=c.cursor()
+
+            add_reg = ("INSERT INTO  student (NAME,CLASS,AGE,SUBJECT_1,SUBJECT_2) VALUES (%s, %s,%s,%s,%s)")
+            data_reg = (NAME.get(),CLASS.get(),AGE.get(),SUBJECT_1.get(),SUBJECT_2.get())
+            cursor.execute(add_reg, data_reg)
+            c.commit()
+            cursor.close()
+            c.close()
+            kt.showinfo('Message','Insert Sucess')
+
+
+        bt= Button(root, text="Submit",command=click)
+        Button(root, text='Quit', command=root.quit).grid(row=5, column=6, sticky=W, pady=4)
+
+        bt.grid(column=1, row=5)
+
+
+        def readfromdatabase():
+            cnx=mysql.connector.connect(user="root",password="",host="localhost",database="mydatabase")
+            cursor = cnx.cursor()
+            query = ("select * from student ");
+            cursor.execute(query)
+            return cursor.fetchall()
+            master.geometry('550x400+100+200')
+
+            showallrecords()
+
+        def showallrecords():
+
+            data = readfromdatabase()
+            for index, dat in enumerate(data):
+                Label(master, text=dat[0]).grid(row=index+1, column=7)
+                Label(master, text=dat[1]).grid(row=index+1, column=8)
+                Label(master, text=dat[2]).grid(row=index+1, column=9)
+                Label(master, text=dat[3]).grid(row=index+1, column=10)
+                Label(master, text=dat[3]).grid(row=index+1, column=11)
+
+
+
+        btn = Button(master, text="dispaly",command=showallrecords)
+        btn.grid(column=5, row=5) 
+                    
+    
+    else:
+        kt.showinfo("Error","Incorrect username or password")
+bt=Button(master,text="login",command=ok)
+bt.grid(row=2,column=1)
+
+		
+mainloop()
+
+
+
