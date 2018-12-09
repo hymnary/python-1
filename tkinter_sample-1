@@ -1,98 +1,190 @@
 from tkinter import *
-import tkinter.messagebox as kt
-import mysql.connector
-master=Tk()
-lb=Label(master,text="Username").grid(row=0)
-E1=Entry(master,bd=5)
-E1.grid(row=0,column=1)
+from tkinter import messagebox
 
-la=Label(master,text="Password").grid(row=1,column=0)
-E2=Entry(master,bd=5)
-E2.grid(row=1,column=1)
+class DetailFrame:
+   """def __init__(self,master):
+      self.master=master
+      self.username = Entry(self.master)
+      self.password= Entry(self.master,show="*")
+      self.username.grid(row=0,column=3,padx=10,pady=10)
+      self.password.grid(row=2,column=3,padx=10,pady=10)
+      self.btsubmit=Button(self.master,text="Login", command=self.login)
+      self.btsubmit.grid(row=4,column=2,padx=10,pady=10)
 
-def ok():
-
-    c=mysql.connector.connect(user="root",passwd="",host="localhost",database="mydatabase")
-
-    Username=E1.get()
-    Password=E2.get()
-
-    if Username== "aloo" and Password== "aloo":
-        
-        kt.showinfo("Login info","Welcome")
-        master.destroy()
-        root=Tk()
-        l1=Label(root, text="NAME").grid(row=0)
-        l2=Label(root, text="CLASS").grid(row=1)
-        l3=Label(root, text="AGE").grid(row=2)
-        l4=Label(root, text="SUBJECT_1").grid(row=3)
-        l5=Label(root, text="SUBJECT_2").grid(row=4)
-        
-        NAME=Entry(root)
-        CLASS=Entry(root)
-        AGE=Entry(root)
-        SUBJECT_1=Entry(root)
-        SUBJECT_2=Entry(root)
-
-        NAME.grid(row=0,column=1)
-        CLASS.grid(row=1,column=1)
-        AGE.grid(row=2,column=1)
-        SUBJECT_1.grid(row=3,column=1)
-        SUBJECT_2.grid(row=4,column=1)
+   def login(self):
+      self.usernametext=self.username.get()
+      self.passwordtext=self.password.get()
+      if self.usernametext=="admin" and self.passwordtext=="admin":
+            self.name="Ram"
+            messagebox.showinfo('ok','welcome')
             
+            self.master.withdraw()
+            
+            self.newWindow = Toplevel(self.master)
+            
+            home = Home(self.newWindow,self.name)"""
+    master=Tk()
+    l1=Label(master,text="")
+    l2=Label(master,text="")
+    l3=Label(master,text="")
+    l4=Label(master,text="")
+    l5=Label(master,text="")
+    cnx=mysql.connector.connect(user="root",password="",host="localhost",database="mydatabase")
+    lb=Label(master,text="BOOKNAME")
+    lb.grid(row=0,column=1)
 
-        def click():
-            c=mysql.connector.connect(user="root",passwd="",host="localhost",database="mydatabase")
-            cursor=c.cursor()
+    lb=Label(master,text="REFERENCE_NUMBER")
+    lb.grid(row=1,column=1)
 
-            add_reg = ("INSERT INTO  student (NAME,CLASS,AGE,SUBJECT_1,SUBJECT_2) VALUES (%s, %s,%s,%s,%s)")
-            data_reg = (NAME.get(),CLASS.get(),AGE.get(),SUBJECT_1.get(),SUBJECT_2.get())
-            cursor.execute(add_reg, data_reg)
-            c.commit()
+    lb=Label(master,text="DATE")
+    lb.grid(row=2,column=1)
+
+    lb=Label(master,text="STORAGE_AREA")
+    lb.grid(row=3,column=1)
+
+    """lb=Label(master,text="SUBJECT_2")
+    lb.grid(row=4)"""
+
+    EBOOKNAME=Entry(master)
+    EREFERENCE_NUMBER=Entry(master)
+    EDATE=Entry(master)
+    ESTORAGE_AREA=Entry(master)
+
+    EBOOKNAME.grid(row=0,column=4)
+    EREFERENCE_NUMBER.grid(row=1,column=4)
+    EDATE.grid(row=2,column=4)
+    ESTORAGE_AREA.grid(row=3,column=4)
+
+    lb=Label(master,text="ENTER REF_NUM TO DELETE")
+    lb.grid(row=7,column=1)
+    LREFERENCE_NUMBER=Entry(master)
+    LREFERENCE_NUMBER.grid(row=7,column=2)
+
+    lb=Label(master,text="ENTER REF_NUM TO DELETE")
+    lb.grid(row=7,column=1)
+    LREFERENCE_NUMBER=Entry(master)
+    LREFERENCE_NUMBER.grid(row=7,column=2)
+
+    lb=Label(master,text="ENTER REF_NUM TO UPDATE")
+    lb.grid(row=10,column=1)
+    UREFERENCE_NUMBER=Entry(master)
+    UREFERENCE_NUMBER.grid(row=10,column=2)
+
+    lb=Label(master,text="ENTER BOOKNAME")
+    lb.grid(row=11,column=1)
+    UBOOKNAME=Entry(master)
+    UBOOKNAME.grid(row=11,column=2)
+
+
+    def ok():
+        #cnx=mysql.connector.connect(user="root",password="",host="localhost",database="mydatabase")
+        cursor=cnx.cursor()
+        add_reg=("INSERT INTO LIBRAR " "(BOOKNAME,REFERENCE_NUMBER,DATE,STORAGE_AREA)" " VALUES(%s,%s,%s,%s)")
+        data_reg=(EBOOKNAME.get(),EREFERENCE_NUMBER.get(),EDATE.get(),ESTORAGE_AREA.get())
+
+        cursor.execute(add_reg,data_reg)
+        cnx.commit()
+        cursor.close()
+        tm.showinfo('Message,','Insert Success')
+
+    bt=Button(master,text="Submit",command=ok)
+    Button(master,text='Quit',command=master.quit).grid(row=5,column=6,sticky=W,pady=4)
+    bt.grid(column=5,row=5)
+    
+    def upder():
+
+        """lb=Label(master,text="ENTER REF_NUM")
+        lb.grid(row=7,column=1)
+        EREFERENCE_NUMBER=Entry(master)
+        EREFERENCE_NUMBER.grid(row=7,column=1)"""
+        h=(UBOOKNAME.get(),UREFERENCE_NUMBER.get())
+
+        #cnx=mysql.connector.connect(user="root",password="",host="localhost",database="mydatabase")
+        cursor=cnx.cursor()
+        add_reg=("UPDATE LIBRAR SET BOOKNAME=%s WHERE REFERENCE_NUMBER=%s")
+        cursor.execute(add_reg,h)
+
+        cnx.commit()
+        cursor.close()
+        #cnx.close
+        tm.showinfo('Message,','Update Success')
+
+    bt=Button(master,text="Update",command=upder)
+    bt.grid(row=6, column=7)
+
+    def delet():
+
+        cursor=cnx.cursor()
+            add_reg=("DELETE FROM LIBRAR WHERE REFERENCE_NUMBER=%s")
+            m=(LREFERENCE_NUMBER.get(),)
+            cursor.execute(add_reg,m)
+
+            cnx.commit()
             cursor.close()
-            c.close()
-            kt.showinfo('Message','Insert Sucess')
+            #cnx.close
+            tm.showinfo('Message,','Delete Success')
 
+        bt=Button(master,text="Delete",command=delet)
+        bt.grid(row=6, column=6)
 
-        bt= Button(root, text="Submit",command=click)
-        Button(root, text='Quit', command=root.quit).grid(row=5, column=6, sticky=W, pady=4)
+    """lb=Label(master,text="ENTER REF_NUM")
+    lb.grid(row=7,column=1)
+    EREFERENCE_NUMBER=Entry(master)
+    EREFERENCE_NUMBER.grid(row=7,column=1)"""
 
-        bt.grid(column=1, row=5)
+            
+      
+"""class DisplayFrame:
+   def __init__(self,master,name):
+      self.master=master
+      self.name=name
+      self.value=StringVar()
+      self.value.set("welcome "+self.name)
+      self.label=Label( self.master,textvariable=self.value)
+      self.label.grid(row=0,column=3,padx=10,pady=10)"""
 
+class DisplayFrame:
 
-        def readfromdatabase():
-            cnx=mysql.connector.connect(user="root",password="",host="localhost",database="mydatabase")
-            cursor = cnx.cursor()
-            query = ("select * from student ");
-            cursor.execute(query)
-            return cursor.fetchall()
-            master.geometry('550x400+100+200')
-
-            showallrecords()
-
-        def showallrecords():
-
-            data = readfromdatabase()
-            for index, dat in enumerate(data):
-                Label(master, text=dat[0]).grid(row=index+1, column=7)
+     
+    def clearLabels():
+        for i in range (10):
+            #l1.configure(text=
+            Label(master, text="").grid(row=i+1, column=8)
+            Label(master, text="").grid(row=i+1, column=9)
+            Label(master, text="").grid(row=i+1, column=10)
+            Label(master, text="").grid(row=i+1, column=11)
+            
+    def showallrecords():
+        data=[]
+        cursor = cnx.cursor()
+        query = ("select * from LIBRAR ");
+        cursor.execute(query)
+        data=cursor.fetchall()
+        clearLabels()
+        #data = readfromdatabase()
+        for index, dat in enumerate(data):
+                l1.configure(text=dat[0])
+                l1.grid(row=index+1,column=7)
+                l2.configure(text=dat[1])
+                l2.grid(row=index+1,column=8)
+                l3.configure(text=dat[2])
+                l3.grid(row=index+1,column=9)
+                l4.configure(text=dat[3])
+                l4.grid(row=index+1,column=10)
+                l5.configure(text=dat[4])
+                l5.grid(row=index+1,column=11)
                 Label(master, text=dat[1]).grid(row=index+1, column=8)
                 Label(master, text=dat[2]).grid(row=index+1, column=9)
                 Label(master, text=dat[3]).grid(row=index+1, column=10)
-                Label(master, text=dat[3]).grid(row=index+1, column=11)
+                Label(master, text=dat[4]).grid(row=index+1, column=11)
+
+    btn = Button(master, text="dispaly",command=showallrecords)
+    btn.grid(column=5, row=6)
+         
+          
 
 
 
-        btn = Button(master, text="dispaly",command=showallrecords)
-        btn.grid(column=5, row=5) 
-                    
-    
-    else:
-        kt.showinfo("Error","Incorrect username or password")
-bt=Button(master,text="login",command=ok)
-bt.grid(row=2,column=1)
-
-		
-mainloop()
-
-
-
+root=Tk()
+login=DetailFrame(root)
+root.mainloop()
