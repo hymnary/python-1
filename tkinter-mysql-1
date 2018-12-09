@@ -1,0 +1,11 @@
+import mysql.connector
+
+mydb=mysql.connector.connect(host="localhost", user="root", passwd="", database="mydatabase")
+
+mycursor=mydb.cursor()
+
+#mycursor.execute("CREATE TABLE LIBRAR (id1 INT AUTO_INCREMENT PRIMARY KEY, BOOKNAME VARCHAR(255), REFERENCE_NUMBER INT NOT NULL, DATE VARCHAR(255), STORAGE_AREA VARCHAR(255) )")
+
+mycursor.execute("CREATE TABLE book (id1 INT PRIMARY KEY, title VARCHAR(255), author VARCHAR(255), isbn INT NOT NULL))")
+
+mydb.commit()
